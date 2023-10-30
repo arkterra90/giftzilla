@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from django.shortcuts import render
 
 # Create your views here.
@@ -5,7 +6,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from index.views import index
+from index.views import home
 
 from .forms import *
 from .models import *
@@ -24,7 +25,7 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse(index))
+            return HttpResponseRedirect(reverse('index:home'))
         else:
             return render(request, "register/login.html", {
                 "message": "Invalid username and/or password."
@@ -35,7 +36,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse("index"))
+    return HttpResponseRedirect(reverse('index:home'))
 
 # Registers a new user.
 def register(request):
