@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="text-center">
+        <h5>Congratulations {{ regSuccess.admin.first_name }} {{ regSuccess.admin.last_name }} you have created a new registry.</h5>
+        <p>Your registry Pin is {{ regSuccess.regPin }}</p>
+        <p> Your registry name is your last name: {{ regSuccess.admin.last_name }}</p>
+        <p>Share this PIN with people you would like to invite to the group so they can register with you.</p>
+        <p>To view this group or edit the details of your registry, click on "View Registries"</p>
+    </div>
+</div>
+
+{% endblock %}

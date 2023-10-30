@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+{% if joinForm %}
+<div class="container">
+    <div class="row justify-content-center" style="padding: 10px;">
+        <form method="post">
+            {% csrf_token %}
+            {{ joinForm.as_p }}
+            <button type="submit" class="btn btn-primary">Join Registry</button>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+{% if message %}
+
+{{ message }}
+
+{% endif %}
+
+{% endblock %}

@@ -5,5 +5,6 @@ app_name = 'user'
 
 urlpatterns = [
 
-        path("createRegistry", views.createRegistry, name="createRegistry")
+        path("createRegistry", views.createRegistry, name="createRegistry"),
+        path("<int:userID>/regJoin", views.regJoin, name="regJoin")
 ]

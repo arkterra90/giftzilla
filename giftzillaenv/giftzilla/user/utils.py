@@ -10,5 +10,5 @@ def generate_pin():
         random_pin = ''.join(random.choice(characters) for _ in range(5))
 
         # Check if the PIN is already used
-        if not giftGroups.objects.filter(pin=random_pin).exists():
+        if not giftGroups.objects.filter(groupPin=random_pin).exists():
             return(random_pin)
