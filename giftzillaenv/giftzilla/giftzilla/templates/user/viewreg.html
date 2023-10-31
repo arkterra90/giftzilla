@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+{% if adminRegs %}
+
+    <h5>Registries You Admin:</h5>
+
+    {% for admin in adminRegs %}
+        
+        <div>
+            <p>Registry Name: {{ admin.regName }}</p>
+            <p>Group admin: {{ admin.admin.first_name }} </p>
+            <p>{{ admin }}</p>
+        </div>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>You currently have no created registries.</p>
+
+{% endif %}
+
+<p>Joined Regs</p>
+
+{{ joinedRegs }}
+
+{% endblock %}

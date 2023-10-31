@@ -27,10 +27,11 @@ class giftGroups(models.Model):
 class Registry(models.Model):
     regPin = models.CharField(max_length=5)
     admin = models.ForeignKey(User, on_delete=models.CASCADE)
+    regName = models.CharField(max_length=25, verbose_name="Registry Group Name:")
     urlNumCap = models.IntegerField(default=5, verbose_name="Max Number Of Gift Request:")
     spendLimit = models.IntegerField(blank=True, null=True, verbose_name="Max Spending Limit:")
     notes = models.TextField(blank=True, null=True, verbose_name="Notes")
     regGroupCap = models.IntegerField(blank=True, null=True, verbose_name="Max Number of Group Participants:")
 
     def __str__(self):
-        return f"{self.regPin} {self.admin} {self.urlNumCap} {self.notes} {self.regGroupCap}"
+        return f"{self.regPin} {self.admin} {self.urlNumCap} {self.notes} {self.regGroupCap} {self.spendLimit} {self.regName}"

@@ -68,3 +68,27 @@ def regJoin(request, userID):
         return render(request, "user/joinreg.html", {
             "joinForm": joinForm
         })
+    
+@login_required
+def viewReg(request, userID):
+
+    if userID != request.user.id:
+        return render(request, "index/404.html")
+    else:
+        user = User.objects.get(id=userID)
+
+        # Get all admined and joined registries
+        try:
+            adminRegs = Registry.objects.filter(admin=user)
+        except ObjectDoesNotExist:
+            adminRegs = None
+        try:
+            joinedRegs = giftGroups.objects.filter(user=user)
+        except ObjectDoesNotExist:
+            joinedRegs = None
+
+        return render(request, "user/viewreg.html", {
+            "adminRegs": adminRegs,
+            "joinedRegs": joinedRegs
+        })
+        

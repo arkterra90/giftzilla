@@ -27,7 +27,7 @@
                     {% if user.is_authenticated %}
                         <ul class="nav">
                             <li class="nav-item"><a class="nav-link" href="{% url 'user:createRegistry' %}">Create Registry</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">View Registries</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'user:viewReg' userID=user.id %}">View Registries</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'user:regJoin' userID=user.id %}">Join Registry</a></li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Welcome {{ user.username }}</a>

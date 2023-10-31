@@ -68,3 +68,4 @@ def register(request):
         return render(request, "register/register.html", {
             "UserForm": UserForm,
         })
+    
