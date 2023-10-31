@@ -1,7 +1,27 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-
-<p>test</p>
+<div style="padding: 10px;">
+    <h3>Welcome to GIFTZILLA - Your Hub for Group Wish List Distribution!</h3>
+    <br>
+    <h5>How Does GIFTZILLA Work?</h5>
+    <ul>
+        <li>Someone in your group creates a registry and becomes your group admin.</li>
+        <li>Your group admin can then share your group's PIN with future group members to join the registry.</li>
+        <li>New group members should create a GIFTZILLA account and join their registry.</li>
+        <li>Once everyone has joined and completed their wish lists, the admin will be able to send a randomized and anonymous wish list to each member of the group.</li>
+        <li>If you're a group member, you'll receive an email with the wish list of another member for you to purchase them gifts.</li>
+        <li>Make sure to pay special attention to any notes your admin makes, so you have the details of when the gift exchange will happen.</li>
+        <li>Enjoy!</li>
+    </ul>
+    {% if user.is_authenticated %}
+    <h3>Please read carefully for a smooth experience!</h3>
+    <ul>
+        <li style="padding: 10px;">To create a new registry, click here: <button class="btn btn-primary"><a style="color: white;" href="{% url 'user:createRegistry' %}">Create Registry</a></button></li>
+        <li style="padding: 10px;">To join a registry group, click here: <button class="btn btn-primary"><a style="color: white;" href="{% url 'user:regJoin' userID=user.id %}">Join Registry</a></button></li>
+        <li style="padding: 10px;">To view registries you administer or have already joined, click here: <button class="btn btn-primary"><a style="color: white;" href="{% url 'user:viewReg' userID=user.id %}">View Registries</a></button></li>
+    </ul>
+    {% endif %}
+</div>
 
 {% endblock %}

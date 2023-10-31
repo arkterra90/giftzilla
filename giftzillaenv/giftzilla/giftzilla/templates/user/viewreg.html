@@ -1,29 +1,35 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-
-{% if adminRegs %}
-
-    <h5>Registries You Admin:</h5>
-
-    {% for admin in adminRegs %}
-        
-        <div>
-            <p>Registry Name: {{ admin.regName }}</p>
-            <p>Group admin: {{ admin.admin.first_name }} </p>
-            <p>{{ admin }}</p>
+<div class="container" style="padding: 10px;">
+    <div class="row">
+        <div class="col">
+            <div>
+                <h5>Registries You Admin:</h5>
+                {% if adminRegs %}
+                    {% for admin in adminRegs %}
+                        <div>
+                            <p>Registry Name: {{ admin.regName }}</p>
+                            <p>Group admin: {{ admin.admin.first_name }}</p>
+                            <p>{{ admin }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>You currently have no created registries.</p>
+                {% endif %}
+            </div>
         </div>
 
-    {% endfor %}
-
-{% else %}
-
-    <p>You currently have no created registries.</p>
-
-{% endif %}
-
-<p>Joined Regs</p>
-
-{{ joinedRegs }}
-
+        <div class="col">
+            <div>
+                <h5>Joined Registries:</h5>
+                {% if joinedRegs %}
+                    {{ joinedRegs }}
+                {% else %}
+                    <p>You currently have no joined registries.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
