@@ -10,7 +10,8 @@
                     {% for admin in adminRegs %}
                         <div>
                             <p>Registry Name: {{ admin.regName }}</p>
-                            <p>Group admin: {{ admin.admin.first_name }}</p>
+                            <p>Registry Pin: {{ admin.regPin }}</p>
+                            <p>Group admin: {{ admin.admin.first_name }} {{ admin.admin.last_name }} </p>
                             <p>{{ admin }}</p>
                         </div>
                     {% endfor %}

@@ -5,6 +5,8 @@
 {% if joinForm %}
 <div class="container">
     <div class="row justify-content-center" style="padding: 10px;">
+        <h5>Join A Registry:</h5>
+        <p>Registry pins are case sensitive. Use the correct upper and lower case characters.</p>
         <form method="post">
             {% csrf_token %}
             {{ joinForm.as_p }}

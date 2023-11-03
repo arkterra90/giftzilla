@@ -72,6 +72,7 @@ def regJoin(request, userID):
 @login_required
 def viewReg(request, userID):
 
+    # Prevents user from accessing other registries when logged in.
     if userID != request.user.id:
         return render(request, "index/404.html")
     else:
