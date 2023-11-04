@@ -106,6 +106,7 @@ def userGifts(request, groupPin, userID):
     if userID != request.user.id:
         return render(request, "index/404.html")
     
+    # Saves users wish list urls and 
     elif request.method == "POST":
         groupReg = Registry.objects.get(regPin=groupPin)
         user = User.objects.get(id=userID)
@@ -125,8 +126,13 @@ def userGifts(request, groupPin, userID):
                 gift.save()
         
         # Saves user selection for someone they can't be paired with
-        noPair = request.POST.get("user_dropdown")  # Use get() to avoid KeyError if it's not present
-        
+        try:
+            noPair = int(request.POST.get("user_dropdown"))
+            p = User.objects.get(id=noPair)
+            t = noGive.objects.create(user=user, noGift=p)
+            t.save()
+        except TypeError:
+            return
     
     else:
         groupReg = Registry.objects.get(regPin=groupPin)
