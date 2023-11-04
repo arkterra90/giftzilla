@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 
+
 from .models import *
 from .forms import *
 from .utils import generate_pin
@@ -12,7 +13,16 @@ from user.models import *
 
 @login_required
 def adminReg(request, groupPin):
-    return
+    reg = Registry.objects.get(regPin=groupPin)
+    reginstance = regForm(instance=reg)
+
+    regPart = giftGroups.objects.filter(groupPin=groupPin)
+
+    return render(request, "user/adminreg.html", {
+        "reginstance": reginstance,
+        "reg": reg,
+        "regPart": regPart
+    })
 
 @login_required
 def createRegistry(request):

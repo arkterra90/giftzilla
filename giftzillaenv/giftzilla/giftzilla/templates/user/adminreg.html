@@ -2,6 +2,26 @@
 
 {% block body %}
 
-<!--Page for admin to view reg and edit details-->
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ message }}</h5>
+            <h5 class="card-text">Admin Registry Info:</h5>
 
+            <form method="post">
+                {% csrf_token %}
+                {{ reginstance.as_p }}
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h5>Registry participants:</h5>
+    {% for part in regPart %}
+        <p>Name: {{ part.user.first_name }} {{ part.user.last_name }}</p>
+        <button><a href="#">View Gift List</a></button>
+    {% endfor %}
+</div>
 {% endblock %}

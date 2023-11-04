@@ -18,4 +18,4 @@ class joinForm(ModelForm):
     class Meta:
         model = giftGroups
         fields = "__all__"
-        exclude = ["user"]
+        exclude = ["user", "registry"]

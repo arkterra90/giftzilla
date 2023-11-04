@@ -7,5 +7,7 @@ from django.shortcuts import render
 def home(request):
     return render(request, "index/index.html")
 
+def custom_404_view(request,exception):
+    return render(request, 'index/404.html', status=404)
 #create logic for randomized gift reg distrobution
     #should include email notification

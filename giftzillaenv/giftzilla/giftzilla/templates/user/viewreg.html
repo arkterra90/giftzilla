@@ -8,11 +8,14 @@
                 <h5>Registries You Admin:</h5>
                 {% if adminRegs %}
                     {% for admin in adminRegs %}
-                        <div style="border: 3px solid gray; padding: 5px; margin: 5px;">
-                            <p>Registry Name: {{ admin.regName }}</p>
+                        <div class="border border-3 border-gray p-3 m-3">
+                            <p class="fw-bold">Registry Name: {{ admin.regName }}</p>
                             <p>Registry Pin: {{ admin.regPin }}</p>
-                            <p>Group admin: {{ admin.admin.first_name }} {{ admin.admin.last_name }} </p>
-                            <p>{{ admin }}</p>
+                            <p>Group admin: {{ admin.admin.first_name }} {{ admin.admin.last_name }}</p>
+                            <p>Individual Wish/URL Limit: {{ admin.urlNumCap }}</p>
+                            <p>Registry Group Limit: {{ admin.regGroupCap }}</p>
+                            <p>Registry Notes: {{ admin.notes }}</p>
+                            <a class="btn btn-primary" href="{% url 'user:adminReg' groupPin=admin.regPin %}">Edit Group Info</a>
                         </div>
                     {% endfor %}
                 {% else %}
@@ -25,7 +28,14 @@
             <div>
                 <h5>Joined Registries:</h5>
                 {% if joinedRegs %}
-                    {{ joinedRegs }}
+                    {% for join in joinedRegs %}
+                        <div class="border border-3 border-gray p-3 m-3">
+                            <p class="fw-bold">Registry Name: {{ join.registry.regName }}</p>
+                            <p>Registry Pin: {{ join.groupPin }}</p>
+                            <p>Registry Notes: {{ join.registry.notes }}</p>
+                            <a class="btn btn-primary" href="#">Edit Your Wishlist</a>
+                        </div>
+                    {% endfor %}
                 {% else %}
                     <p>You currently have no joined registries.</p>
                 {% endif %}
