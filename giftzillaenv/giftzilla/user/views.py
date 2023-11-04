@@ -11,6 +11,10 @@ from .utils import generate_pin
 from user.models import *
 
 @login_required
+def adminReg(request, groupPin):
+    return
+
+@login_required
 def createRegistry(request):
 
     if request.method == "POST":
@@ -24,8 +28,10 @@ def createRegistry(request):
             instance.regPin = newGroupPin
             instance.save()
 
+            # Gives user feedback on their unique group pin and info
             regSuccess = Registry.objects.get(regPin=newGroupPin)
 
+            # Admin should be auto added to their own reg.
             joinGroup = giftGroups(user=user, groupPin=newGroupPin)
             joinGroup.save()
 
@@ -49,20 +55,34 @@ def regJoin(request, userID):
             instance = f.save(commit=False)
             instance.user = user
             pin = instance.groupPin
-            try:
-                Registry.objects.get(regPin=pin)
-                instance.save()
-                return render(request, 'user/joinreg.html', {
-                    "message": "Success group joined. Check View Registries to see group."
-                })
+
+            # Makes sure user doesn't join the same reg twice
+            try: 
+                exist = giftGroups.objects.get(groupPin=pin, user=user)
+                if exist != None:
+                    return render(request, 'user/joinreg.html', {
+                        "joinForm": joinForm,
+                        "message": "You have already joined that registry. Go to View Registries to get more details."
+                    })
             
+            # If user has not already joined reg user joining can move forward
             except ObjectDoesNotExist:
+
+            # makes sure the registry pre-exist in the data base
+                try:
+                    Registry.objects.get(regPin=pin)
+                    instance.save()
+                    return render(request, 'user/joinreg.html', {
+                        "message": "Success group joined. Check View Registries to see group."
+                    })
+                
+                except ObjectDoesNotExist:
+            
+                    return render(request, "user/joinreg.html", {
+                        "joinForm": joinForm,
+                        "message": "Group does not exist. Try again"
+                    })
         
-                return render(request, "user/joinreg.html", {
-                    "joinForm": joinForm,
-                    "message": "Group does not exist. Try again"
-                })
-    
     else:
 
         return render(request, "user/joinreg.html", {
@@ -92,4 +112,3 @@ def viewReg(request, userID):
             "adminRegs": adminRegs,
             "joinedRegs": joinedRegs
         })
-        

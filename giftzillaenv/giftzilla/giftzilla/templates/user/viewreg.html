@@ -8,7 +8,7 @@
                 <h5>Registries You Admin:</h5>
                 {% if adminRegs %}
                     {% for admin in adminRegs %}
-                        <div>
+                        <div style="border: 3px solid gray; padding: 5px; margin: 5px;">
                             <p>Registry Name: {{ admin.regName }}</p>
                             <p>Registry Pin: {{ admin.regPin }}</p>
                             <p>Group admin: {{ admin.admin.first_name }} {{ admin.admin.last_name }} </p>
