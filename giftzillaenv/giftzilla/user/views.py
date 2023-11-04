@@ -126,15 +126,7 @@ def userGifts(request, groupPin, userID):
         
         # Saves user selection for someone they can't be paired with
         noPair = request.POST.get("user_dropdown")  # Use get() to avoid KeyError if it's not present
-        p = noGiveForm()  # Replace NoGiveForm with your actual form class name
-        if p.is_valid():
-            instance = p.save(commit=False)
-            instance.noGift = noPair
-            instance.user = user
-            instance.save()
-        else:
-            return
-
+        
     
     else:
         groupReg = Registry.objects.get(regPin=groupPin)
@@ -147,11 +139,15 @@ def userGifts(request, groupPin, userID):
         for i in range(urlCap):
             giftForms.append(giftForm(prefix=f'gift_form_{i}'))
 
+        noForm = noGiveForm()
+        noForm.fields['noGift'].queryset = regUsers
+        
         return render(request, "user/usergifts.html", {
             "groupReg": groupReg,
             "user": user,
             "giftForms": giftForms,
             "regUsers": regUsers,
+            "noGiveForm": noForm
         })
 
 @login_required

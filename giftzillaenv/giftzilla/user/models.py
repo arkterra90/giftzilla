@@ -40,7 +40,7 @@ class giftGroups(models.Model):
 # Model to allow users to select a person in their registry they cannot give a gift to such as a spouse. 
 class noGive(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='nogive_user')
-    noGift = models.ForeignKey(User, on_delete=models.CASCADE, related_name='nogive_noGift')
+    noGift = models.ForeignKey(User, on_delete=models.CASCADE, related_name='nogive_noGift', verbose_name="User to not pair with:")
 
     def __str__(self):
         return f"{self.user} {self.noGift}"

@@ -22,5 +22,6 @@ class joinForm(ModelForm):
 
 class noGiveForm(ModelForm):
     class Meta:
-        model: noGive
+        model = noGive
         fields = "__all__"
+        exclude = ["user"]
