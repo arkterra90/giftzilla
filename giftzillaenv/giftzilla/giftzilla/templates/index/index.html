@@ -1,9 +1,9 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div style="padding: 10px;">
-    <h3>Welcome to GIFTZILLA - Your Hub for Group Wish List Distribution!</h3>
-    <br>
+<div class="container my-5">
+    <h3 class="mb-4">Welcome to GIFTZILLA - Your Hub for Group Wish List Distribution!</h3>
+
     <h5>How Does GIFTZILLA Work?</h5>
     <ul>
         <li>Someone in your group creates a registry and becomes your group admin.</li>
@@ -14,12 +14,22 @@
         <li>Make sure to pay special attention to any notes your admin makes, so you have the details of when the gift exchange will happen.</li>
         <li>Enjoy!</li>
     </ul>
+
     {% if user.is_authenticated %}
-    <h3>Please read carefully for a smooth experience!</h3>
+    <h3 class="mt-4">Please read carefully for a smooth experience!</h3>
     <ul>
-        <li style="padding: 10px;">To create a new registry, click here: <button class="btn btn-primary"><a style="color: white;" href="{% url 'user:createRegistry' %}">Create Registry</a></button></li>
-        <li style="padding: 10px;">To join a registry group, click here: <button class="btn btn-primary"><a style="color: white;" href="{% url 'user:regJoin' userID=user.id %}">Join Registry</a></button></li>
-        <li style="padding: 10px;">To view registries you administer or have already joined, click here: <button class="btn btn-primary"><a style="color: white;" href="{% url 'user:viewReg' userID=user.id %}">View Registries</a></button></li>
+        <li class="mb-2">
+            To create a new registry, click here:
+            <a href="{% url 'user:createRegistry' %}" class="btn btn-primary">Create Registry</a>
+        </li>
+        <li class="mb-2">
+            To join a registry group, click here:
+            <a href="{% url 'user:regJoin' userID=user.id %}" class="btn btn-primary">Join Registry</a>
+        </li>
+        <li class="mb-2">
+            To view registries you administer or have already joined, click here:
+            <a href="{% url 'user:viewReg' userID=user.id %}" class="btn btn-primary">View Registries</a>
+        </li>
     </ul>
     {% endif %}
 </div>

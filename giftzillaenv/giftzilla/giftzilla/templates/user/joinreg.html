@@ -3,32 +3,36 @@
 {% block body %}
 
 {% if joinForm %}
-<div class="container">
-    <div class="row justify-content-center" style="padding: 10px;">
-        <h5>Join A Registry:</h5>
-        <p>Registry pins are case sensitive. Use the correct upper and lower case characters.</p>
-        <form method="post">
-            {% csrf_token %}
-            {{ joinForm.as_p }}
-            <button type="submit" class="btn btn-primary">Join Registry</button>
-        </form>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h5>Join A Registry:</h5>
+            <p>Registry pins are case sensitive. Use the correct upper and lower case characters.</p>
+            <form method="post">
+                {% csrf_token %}
+                {{ joinForm.as_p }}
+                <button type="submit" class="btn btn-primary">Join Registry</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8">
+            <h5>Once you join a registry, you will be able to complete your wish list.</h5>
+        </div>
     </div>
 </div>
-
-<div class="container">
-    <div class="row justify-content-center" style="padding: 10px;">
-        <h5>Once you join a registry you will be able to complete you wish list.</h5>
-    </div>
-</div>
-
 {% endif %}
 
 {% if message %}
-
-{{ message }}
-
-<p style="padding: 10px;">Now that you have joined a registry you can click here to complete you wish list.</p>
-
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            {{ message }}
+            <p class="mt-4">Now that you have joined a registry, you can click here to complete your wish list.</p>
+        </div>
+    </div>
+</div>
 {% endif %}
 
 {% endblock %}
