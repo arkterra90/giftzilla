@@ -100,6 +100,61 @@ def regJoin(request, userID):
         })
     
 @login_required
+def userGifts(request, groupPin, userID):
+
+    # Makes sure a logged in user cannot alter another users list
+    if userID != request.user.id:
+        return render(request, "index/404.html")
+    
+    elif request.method == "POST":
+        groupReg = Registry.objects.get(regPin=groupPin)
+        user = User.objects.get(id=userID)
+        urlCap = groupReg.urlNumCap
+
+        giftForms = []
+
+        for i in range(urlCap):
+            form = giftForm(request.POST, prefix=f'gift_form_{i}')
+            giftForms.append(form)
+
+        if all(form.is_valid() for form in giftForms):
+            for form in giftForms:
+                gift = form.save(commit=False)
+                gift.user = user 
+                gift.groupPin = groupReg.regPin
+                gift.save()
+        
+        # Saves user selection for someone they can't be paired with
+        noPair = request.POST.get("user_dropdown")  # Use get() to avoid KeyError if it's not present
+        p = noGiveForm()  # Replace NoGiveForm with your actual form class name
+        if p.is_valid():
+            instance = p.save(commit=False)
+            instance.noGift = noPair
+            instance.user = user
+            instance.save()
+        else:
+            return
+
+    
+    else:
+        groupReg = Registry.objects.get(regPin=groupPin)
+        user = User.objects.get(id=userID)
+        urlCap = groupReg.urlNumCap
+        regUsers = giftGroups.objects.filter(groupPin=groupPin)
+
+        giftForms = []
+
+        for i in range(urlCap):
+            giftForms.append(giftForm(prefix=f'gift_form_{i}'))
+
+        return render(request, "user/usergifts.html", {
+            "groupReg": groupReg,
+            "user": user,
+            "giftForms": giftForms,
+            "regUsers": regUsers,
+        })
+
+@login_required
 def viewReg(request, userID):
 
     # Prevents user from accessing other registries when logged in.

@@ -2,6 +2,41 @@
 
 {% block body %}
 
-<!--Page for entering user gifts after successfully joining a reg-->
+<div class="container">
+    <h5>Welcome {{ user.first_name }} to your wish list!</h5>
+    <ul>
+        <li>Below you can copy and paste links to gifts you would like.</li>
+        <li>You can also give a ranking to your top three gifts.</li>
+        <li>Your registry admin has assigned a spending limit of ${{ groupReg.spendLimit }}. So please be mindful of that as you input your gifts.</li>
+        <li>If there is anyone in your registry you cannot be pair with, such as a household member, make that selection as well.</li>
+    </ul>
+</div>
+<div class="container">
+    <h5>You're registering a wish list for group: {{ groupReg.regName }}</h5>
+    <h5>Group ID: {{ groupReg.regPin }}</h5>
+    <h5>Spending Limit: ${{ groupReg.spendLimit }}</h5>
+    <h5>Group Admin: {{ groupReg.admin.first_name }} {{ groupReg.admin.last_name }}</h5>
+    <form method="post">
+        {% csrf_token %}
+        <ul class="list-group">
+            {% for form in giftForms %}
+                <li class="list-group-item">
+                    {{ form.as_p }}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <br>
+            <label for="user_dropdown">List anyone you cannot be paired with:</label>
+            <select name="user_dropdown" id="user_dropdown" class="form-select">
+            <option value="" selected disabled>Select a user:</option>
+            {% for user in regUsers %}
+                <option value="{{ user }}">{{ user.user.first_name }} {{ user.user.last_name }}</option>
+            {% endfor %}
+            </select>
+        <br>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
 
 {% endblock %}
