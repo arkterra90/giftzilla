@@ -152,6 +152,7 @@ def userGifts(request, groupPin, userID):
                 gift = form.save(commit=False)
                 gift.user = user 
                 gift.groupPin = groupReg.regPin
+                print(gift)
                 gift.save()
         
         # Saves user selection for someone they can't be paired with
@@ -159,6 +160,7 @@ def userGifts(request, groupPin, userID):
             noPair = int(request.POST.get("user_dropdown"))
             p = User.objects.get(id=noPair)
             t = noGive.objects.create(user=user, noGift=p)
+            print(t)
             t.save()
 
             return render(request, "user/usergifts.html", {
@@ -169,6 +171,7 @@ def userGifts(request, groupPin, userID):
                 "regUsers": regUsers,
                 "noGiveForm": noForm,
                 })
+        
         except TypeError:
             return render(request, "user/usergifts.html", {
             "groupReg": groupReg,
@@ -219,8 +222,18 @@ def viewReg(request, userID):
             joinedRegs = giftGroups.objects.filter(user=user)
         except ObjectDoesNotExist:
             joinedRegs = None
+        try:
+            Gifts = Gift.objects.filter(user=user)
+        except ObjectDoesNotExist:
+            Gifts = None
+        try:
+            noPair = noGive.objects.filter(user=user)
+        except ObjectDoesNotExist:
+            noPair = None
 
         return render(request, "user/viewreg.html", {
             "adminRegs": adminRegs,
-            "joinedRegs": joinedRegs
+            "joinedRegs": joinedRegs,
+            "gifts": Gifts,
+            "noPair": noPair
         })

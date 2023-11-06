@@ -1,4 +1,5 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, CharField
+
 
 from .models import *
 
@@ -9,6 +10,7 @@ class regForm(ModelForm):
         exclude = ["regPin", "admin"]
 
 class giftForm(ModelForm):
+    giftUrl = CharField(required=False)
     class Meta:
         model = Gift
         fields = "__all__"

@@ -10,7 +10,7 @@ Rank = (
 class Gift(models.Model):
     groupPin = models.CharField(max_length=5)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    giftUrl = models.URLField()
+    giftUrl = models.URLField(blank=True, null=True)
     giftRank = models.CharField(max_length=1, choices=Rank, blank=True, null=True)
 
     def __str__(self):
@@ -41,13 +41,16 @@ class giftGroups(models.Model):
 class noGive(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='nogive_user')
     noGift = models.ForeignKey(User, on_delete=models.CASCADE, related_name='nogive_noGift', verbose_name="User to not pair with:")
+    regPin = models.CharField(max_length=5)
 
     def __str__(self):
-        return f"{self.user} {self.noGift}"
+        return f"{self.user} {self.noGift} {self.regPin}"
     
 class listPair(models.Model):
     giver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listpair_giver')
     reciever = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listpair_reciever')
+    regPin = models.CharField(max_length=5)
+
 
     def __str__(self):
-        return f"{self.giver} {self.reciever}"
+        return f"{self.giver} {self.reciever} {self.regPin}"

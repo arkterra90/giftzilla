@@ -34,6 +34,23 @@
                             <p>Registry Pin: {{ join.groupPin }}</p>
                             <p>Registry Notes: {{ join.registry.notes }}</p>
                             <a class="btn btn-primary" href="{% url 'user:userGifts' groupPin=join.groupPin userID=join.user.id %}">Submit Your Wishlist</a>
+                            {% if noPair %}
+                                <p>You have requested to not be paired with: {{ noPair }}</p>
+                            {% else %}
+                                <p>You have not request to  not be paired with anyone from your registry</p>
+                            {% endif %}
+                            {% if gifts %}
+                                {% for gift in gifts %}
+                                    {% if gift.groupPin == join.groupPin %}
+                                        <div>
+                                            <p>Gift url: <a href="{{ gift.giftUrl}}">{{ gift.giftUrl }}</a></p>
+                                            <p>Gift Rank: {{ gift.giftRank }}</p>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <p>You have not submitted a wish list for this group.</p>
+                            {% endif %}
                         </div>
                     {% endfor %}
                 {% else %}
