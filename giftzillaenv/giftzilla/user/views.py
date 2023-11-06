@@ -4,11 +4,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-
-
-
-
-
 from .models import *
 from .forms import *
 from .utils import generate_pin
