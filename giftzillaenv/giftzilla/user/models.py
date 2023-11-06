@@ -10,7 +10,7 @@ Rank = (
 class Gift(models.Model):
     groupPin = models.CharField(max_length=5)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    giftUrl = models.URLField(blank=True, null=True)
+    giftUrl = models.URLField(max_length=500, blank=True, null=True)
     giftRank = models.CharField(max_length=1, choices=Rank, blank=True, null=True)
 
     def __str__(self):
@@ -40,7 +40,7 @@ class giftGroups(models.Model):
 # Model to allow users to select a person in their registry they cannot give a gift to such as a spouse. 
 class noGive(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='nogive_user')
-    noGift = models.ForeignKey(User, on_delete=models.CASCADE, related_name='nogive_noGift', verbose_name="User to not pair with:")
+    noGift = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='nogive_noGift', verbose_name="User to not pair with:")
     regPin = models.CharField(max_length=5)
 
     def __str__(self):
