@@ -137,9 +137,6 @@ def userGifts(request, groupPin, userID):
         regUsers = giftGroups.objects.filter(groupPin=groupPin)
         noForm = noGiveForm()
         noForm.fields['noGift'].queryset = regUsers
-        
-
-
 
         giftForms = []
 
@@ -159,8 +156,7 @@ def userGifts(request, groupPin, userID):
         try:
             noPair = int(request.POST.get("user_dropdown"))
             p = User.objects.get(id=noPair)
-            t = noGive.objects.create(user=user, noGift=p)
-            print(t)
+            t = noGive.objects.create(user=user, noGift=p, regPin=groupPin)
             t.save()
 
             return render(request, "user/usergifts.html", {
