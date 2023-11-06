@@ -33,7 +33,7 @@
                             <p class="fw-bold">Registry Name: {{ join.registry.regName }}</p>
                             <p>Registry Pin: {{ join.groupPin }}</p>
                             <p>Registry Notes: {{ join.registry.notes }}</p>
-                            <a class="btn btn-primary" href="{% url 'user:userGifts' groupPin=join.groupPin userID=join.user.id %}">Edit Your Wishlist</a>
+                            <a class="btn btn-primary" href="{% url 'user:userGifts' groupPin=join.groupPin userID=join.user.id %}">Submit Your Wishlist</a>
                         </div>
                     {% endfor %}
                 {% else %}

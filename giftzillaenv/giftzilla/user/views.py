@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
+
 
 
 
@@ -13,16 +17,34 @@ from user.models import *
 
 @login_required
 def adminReg(request, groupPin):
-    reg = Registry.objects.get(regPin=groupPin)
-    reginstance = regForm(instance=reg)
 
-    regPart = giftGroups.objects.filter(groupPin=groupPin)
+    # Updates registry details
+    if request.method == "POST":
 
-    return render(request, "user/adminreg.html", {
-        "reginstance": reginstance,
-        "reg": reg,
-        "regPart": regPart
-    })
+        instance = Registry.objects.get(regPin=groupPin)
+
+        instance.regName = request.POST.get("regName")
+        instance.urlNumCap = request.POST.get("urlNumCap")
+        instance.spendLimit = request.POST.get("spendLimit")
+        instance.notes = request.POST.get("notes")
+        instance.regGroupCap = request.POST.get("regGroupCap")
+
+        instance.save()
+
+        return HttpResponseRedirect(reverse('user:adminReg', args=[groupPin]))
+    
+    # Queries for user admin registry and sends info to template
+    else:
+        reg = Registry.objects.get(regPin=groupPin)
+        reginstance = regForm(instance=reg)
+
+        regPart = giftGroups.objects.filter(groupPin=groupPin)
+
+        return render(request, "user/adminreg.html", {
+            "reginstance": reginstance,
+            "reg": reg,
+            "regPart": regPart
+        })
 
 @login_required
 def createRegistry(request):
@@ -111,6 +133,13 @@ def userGifts(request, groupPin, userID):
         groupReg = Registry.objects.get(regPin=groupPin)
         user = User.objects.get(id=userID)
         urlCap = groupReg.urlNumCap
+        groupReg = Registry.objects.get(regPin=groupPin)
+        regUsers = giftGroups.objects.filter(groupPin=groupPin)
+        noForm = noGiveForm()
+        noForm.fields['noGift'].queryset = regUsers
+        
+
+
 
         giftForms = []
 
@@ -131,8 +160,24 @@ def userGifts(request, groupPin, userID):
             p = User.objects.get(id=noPair)
             t = noGive.objects.create(user=user, noGift=p)
             t.save()
+
+            return render(request, "user/usergifts.html", {
+                "message": "Wish list saved.",
+                "groupReg": groupReg,
+                "user": user,
+                "giftForms": giftForms,
+                "regUsers": regUsers,
+                "noGiveForm": noForm,
+                })
         except TypeError:
-            return
+            return render(request, "user/usergifts.html", {
+            "groupReg": groupReg,
+            "user": user,
+            "giftForms": giftForms,
+            "regUsers": regUsers,
+            "noGiveForm": noForm,
+            "message": "Something went wrong saving your wish list. Please try again."
+        })
     
     else:
         groupReg = Registry.objects.get(regPin=groupPin)
