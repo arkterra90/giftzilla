@@ -9,5 +9,7 @@ urlpatterns = [
         path("<int:userID>/regJoin", views.regJoin, name="regJoin"),
         path("<int:userID>/viewreg", views.viewReg, name="viewReg"),
         path("<str:groupPin>/adminReg", views.adminReg, name="adminReg"),
-        path("<str:groupPin>/<int:userID>/userGifts", views.userGifts, name="userGifts")
+        path("<str:groupPin>/<int:userID>/userGifts", views.userGifts, name="userGifts"),
+        path("<str:groupPin>/<int:userID>/viewWishList", views.viewWishList, name="viewWishList")
+
 ]

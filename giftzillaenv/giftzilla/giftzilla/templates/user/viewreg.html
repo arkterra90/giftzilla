@@ -37,33 +37,12 @@
                             <p>Wish List Spending Limit: ${{ join.registry.spendLimit }}</p>
                             <p>Registry Notes: {{ join.registry.notes }}</p>
 
-                            <!-- If a wish list has not been submitted user is given option. If list submitted option not present. -->
-                            {% if gifts.1.groupPin == join.groupPin %}
+                            {% if join.groupPin in gifts %}
+                            <a class="btn btn-primary" href="{% url 'user:viewWishList' groupPin=join.groupPin userID=join.user.id %}">Edit/View Wish List</a>
                             {% else %}
                             <a class="btn btn-primary" href="{% url 'user:userGifts' groupPin=join.groupPin userID=join.user.id %}">Submit Your Wishlist</a>
                             {% endif %}
-
-                            <!-- Displays if a user has choosen someone to not be paired with in gift list. -->
                            
-                            {% if not noPair %}
-                                <p>You have not requested not to be paired with anyone from your registry</p>
-                            {% elif noPair.regPin == join.regPin %}
-                                <p>You have requested not to be paired with: {{ noPair.noGift }}</p>
-                            {% endif %}
-
-                            <!-- Displays gifts if user has submitted wish list. -->
-                            {% if gifts %}
-                                {% for gift in gifts %}
-                                    {% if gift.groupPin == join.groupPin %}
-                                        <div>
-                                            <p>Gift url: <a href="{{ gift.giftUrl }}" target="_blank">{{ gift.giftUrl }}</a></p>
-                                            <p>Gift Rank: {{ gift.giftRank }}</p>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                <p>You have not submitted a wish list for this group.</p>
-                            {% endif %}
                         </div>
                     {% endfor %}
 

@@ -34,7 +34,7 @@
             <select name="user_dropdown" id="user_dropdown" class="form-select">
             <option value="0">None</option>
             {% for user in regUsers %}
-                <option value="{{ user.user.id }}">{{ user.user.id }} {{ user.user.last_name }}</option>
+                <option value="{{ user.user.id }}">{{ user.user.first_name }} {{ user.user.last_name }}</option>
             {% endfor %}
             </select>
         <br>

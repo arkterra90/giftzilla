@@ -24,6 +24,9 @@ def adminReg(request, groupPin):
         instance.notes = request.POST.get("notes")
         instance.regGroupCap = request.POST.get("regGroupCap")
 
+        if instance.regGroupCap == '':
+            instance.regGroupCap = None
+
         instance.save()
 
         return HttpResponseRedirect(reverse('user:adminReg', args=[groupPin]))
@@ -184,38 +187,12 @@ def userGifts(request, groupPin, userID):
             "noGiveForm": noForm,
             "message": "Something went wrong saving your wish list. Please try again."
         })
-
-        # else:
-
-        #     for i in range(urlCap):
-        #         form = giftForm(request.POST, prefix=f'gift_form_{i}')
-        #         if form.is_valid():
-        #             gift = currentGift[i]  # Assuming currentGift contains all existing entries
-        #             gift.user = user 
-        #             gift.groupPin = groupReg.regPin
-        #             gift.save()
-
-        #         regUsers = giftGroups.objects.filter(groupPin=groupPin)
-        #         noForm = noGiveForm()
-        #         noForm.fields['noGift'].queryset = regUsers
-
-        #         return render(request, "user/usergifts.html", {
-        #             "message": "Wish list updated.",
-        #             "groupReg": groupReg,
-        #             "user": user,
-        #             "giftForms": giftForms,
-        #             "regUsers": regUsers,
-        #             "noGiveForm": noForm,
-        #             })
     
     else:
         groupReg = Registry.objects.get(regPin=groupPin)
         user = User.objects.get(id=userID)
         urlCap = groupReg.urlNumCap
         regUsers = giftGroups.objects.filter(groupPin=groupPin)
-
-        noPair = noGive.objects.get(user=user)
-       
 
         giftForms = []
 
@@ -231,7 +208,7 @@ def userGifts(request, groupPin, userID):
             "giftForms": giftForms,
             "regUsers": regUsers,
             "noGiveForm": noForm,
-            "noPair": noPair
+            
         })
 
 @login_required
@@ -253,17 +230,32 @@ def viewReg(request, userID):
         except ObjectDoesNotExist:
             joinedRegs = None
         try:
-            Gifts = Gift.objects.filter(user=user)
+            Gifts = Gift.objects.filter(user=user).values_list('groupPin', flat=True).distinct()
         except ObjectDoesNotExist:
             Gifts = None
-        try:
-            noPair = noGive.objects.filter(user=user)
-        except ObjectDoesNotExist:
-            noPair = None
-
+       
         return render(request, "user/viewreg.html", {
             "adminRegs": adminRegs,
             "joinedRegs": joinedRegs,
             "gifts": Gifts,
+           
+        })
+    
+@login_required
+def viewWishList(request, userID, groupPin):
+
+    regDetail =  Registry.objects.get(regPin=groupPin)
+    user = User.objects.get(id=userID)
+    regWishList = Gift.objects.filter(groupPin=groupPin, user=user)
+    noPair = noGive.objects.filter(regPin=groupPin, user=user)
+
+    if request.method == "POST":
+        return
+    
+    else:
+
+        return render(request, "user/wishlist.html", {
+            "regDetail": regDetail,
+            "regWishList": regWishList,
             "noPair": noPair
         })
