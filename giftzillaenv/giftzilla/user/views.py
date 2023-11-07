@@ -43,6 +43,16 @@ def adminReg(request, groupPin):
             "reg": reg,
             "regPart": regPart
         })
+    
+@login_required
+def adminWishListView(request, userID, groupPin):
+
+    gifts = Gift.objects.filter(user=userID, groupPin=groupPin)
+    reg = Registry.objects.get(regPin=groupPin)
+    return render(request, "user/adminwishview.html", {
+        "reg": reg,
+        "gifts": gifts
+    })
 
 @login_required
 def createRegistry(request):
