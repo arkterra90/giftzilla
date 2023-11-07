@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from .models import *
 from .forms import *
-from .utils import generate_pin
+from .utils import generate_pin, regPairs
 
 from user.models import *
 
@@ -129,6 +129,16 @@ def regJoin(request, userID):
             "joinForm": joinForm
         })
     
+@login_required
+def regPair(request, groupPin):
+
+    reg = Registry.objects.filter(regPin=groupPin)
+    regUsers = giftGroups.objects.filter(groupPin=groupPin)
+    noPairs = noGive.objects.filter(regPin=groupPin)
+
+
+    return
+
 @login_required
 def userGifts(request, groupPin, userID):
 

@@ -51,6 +51,5 @@ class listPair(models.Model):
     reciever = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listpair_reciever')
     regPin = models.CharField(max_length=5)
 
-
     def __str__(self):
         return f"{self.giver} {self.reciever} {self.regPin}"

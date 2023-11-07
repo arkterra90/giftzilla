@@ -2,6 +2,10 @@
 
 {% block body %}
 
+<div class="container py-2">
+    <a class="btn btn-primary" href="{% url 'user:viewReg' userID=user.id %}">Back To View Registries</a>
+</div>
+
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="card">
         <div class="card-body">
@@ -18,10 +22,12 @@
 </div>
 
 <div class="container">
-    <h5>Registry participants:</h5>
+    <h5 class="mt-4">Registry participants:</h5>
     {% for part in regPart %}
-        <p>Name: {{ part.user.first_name }} {{ part.user.last_name }}</p>
-        <button><a href="{% url 'user:adminWishListView' groupPin=reg.regPin userID=part.user.id %}">View Gift List</a></button>
+        <div class="mb-3">
+            <p class="mb-0">Name: {{ part.user.first_name }} {{ part.user.last_name }}</p>
+            <a class="btn btn-primary" href="{% url 'user:adminWishListView' groupPin=reg.regPin userID=part.user.id %}">View Gift List</a>
+        </div>
     {% endfor %}
 </div>
 {% endblock %}

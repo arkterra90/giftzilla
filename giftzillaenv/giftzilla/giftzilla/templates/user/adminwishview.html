@@ -1,9 +1,26 @@
 {% extends 'layout.html' %}
 
 {% block body %} 
+<div class="container" style="padding: 10px;">
+<a class="btn btn-primary px-2" href="{% url 'user:adminReg' groupPin=reg.regPin %}">Back To Group Info</a>
+</div>
 
-{{ reg }}
+<div style="padding: 10px;">
+<h4 class="text-center">Wish list for {{ gifts.0.user.first_name }} {{ gifts.0.user.last_name }}</h4>
+<h4 class="text-center">Registry: {{ reg.regName }}</h4>
+<h4 class="text-center">Registry Pin: {{ reg.regPin }}</h4>
+</div>
 
-{{ gifts }}
+<div class="container mt-4">
+    {% for gift in gifts %}
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="border border-3 p-3 mb-4 text-start">
+            <p>Wish URL: <a target="_blank" href="{{ gift.giftUrl }}">{{ gift.giftUrl }}</a></p>
+            <p>Wish Ranking: {{ gift.giftRank }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
 
 {% endblock %}

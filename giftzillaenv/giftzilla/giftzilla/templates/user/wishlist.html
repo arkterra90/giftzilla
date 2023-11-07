@@ -1,6 +1,10 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+<div class="container" style="padding: 10px;">
+    <a class="btn btn-primary" href="{% url 'user:viewReg' userID=user.id %}">Back To View Registries</a>
+</div>
+
 <div class="container">
     <h4 class="mt-4">Wish list info for {{ regDetail.regName }} registry:</h4>
     <p>Registry Admin: {{ regDetail.admin.first_name }}  {{ regDetail.admin.last_name }}</p>

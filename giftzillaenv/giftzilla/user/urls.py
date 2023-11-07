@@ -11,7 +11,9 @@ urlpatterns = [
         path("<str:groupPin>/adminReg", views.adminReg, name="adminReg"),
         path("<str:groupPin>/<int:userID>/userGifts", views.userGifts, name="userGifts"),
         path("<str:groupPin>/<int:userID>/viewWishList", views.viewWishList, name="viewWishList"),
-        path("<str:groupPin>/<int:userID>/adminWishListView", views.adminWishListView, name="adminWishListView")
+        path("<str:groupPin>/<int:userID>/adminWishListView", views.adminWishListView, name="adminWishListView"),
+        path("<str:groupPin>/regPair", views.regPair, name="regPair"),
+
 
 
 ]

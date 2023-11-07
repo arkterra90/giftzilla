@@ -28,8 +28,10 @@
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            {{ message }}
-            <p class="mt-4">Now that you have joined a registry, you can click here to complete your wish list.</p>
+            <h2>{{ message }}</h2>
+            <p class="mt-4">Now that you have joined a registry, you can complete your wish list.</p>
+            <p class="mt-4">Once you have completed your registry wish list you will be notified when your registry pairing is complete.</p>
+            <a class="btn btn-primary" href="{% url 'user:viewReg' userID=user.id %}">View Registries</a>
         </div>
     </div>
 </div>
