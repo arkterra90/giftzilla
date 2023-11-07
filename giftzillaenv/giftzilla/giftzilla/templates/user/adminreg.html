@@ -21,7 +21,7 @@
     <h5>Registry participants:</h5>
     {% for part in regPart %}
         <p>Name: {{ part.user.first_name }} {{ part.user.last_name }}</p>
-        <button><a href="#">View Gift List</a></button>
+        <button><a href="{% url 'user:adminWishListView' groupPin=reg.regPin userID=part.user.id %}">View Gift List</a></button>
     {% endfor %}
 </div>
 {% endblock %}
