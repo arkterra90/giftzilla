@@ -18,7 +18,7 @@
     <div class="border border-3 p-3 mb-4">
         <p>Wish URL: <a target="_blank" href="{{ wish.giftUrl }}">{{ wish.giftUrl }}</a></p>
         <p>Wish Ranking: {{ wish.giftRank }}</p>
-        <button class="btn btn-primary"><a style="color: white;" href="#">Edit Wish</a></button>
+        <button class="btn btn-primary"><a style="color: white;" href="{% url 'user:wishEdit' wishID=wish.id %}">Edit Wish</a></button>
     </div>
     {% endfor %}
 </div>

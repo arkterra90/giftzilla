@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from .models import *
 from .forms import *
-from .utils import generate_pin, regPairs
+from .utils import generate_pin, listPair
 
 from user.models import *
 
@@ -72,7 +72,7 @@ def createRegistry(request):
             regSuccess = Registry.objects.get(regPin=newGroupPin)
 
             # Admin should be auto added to their own reg.
-            joinGroup = giftGroups(user=user, groupPin=newGroupPin)
+            joinGroup = giftGroups(user=user, groupPin=newGroupPin, registry=regSuccess)
             joinGroup.save()
 
         return render(request, "user/regsuccess.html", {
@@ -84,6 +84,24 @@ def createRegistry(request):
             "regForm": regForm
         })
     
+@login_required
+def regDelete(request, groupPin):
+    
+    reg = Registry.objects.get(regPin=groupPin)
+
+    if request.method == "POST":
+
+        
+        reg.delete()
+        userID = request.user.id
+        
+        return HttpResponseRedirect(reverse('user:viewReg', args=[userID]))
+
+    else:
+        return render(request, "user/regdelete.html", {
+            "reg": reg
+        })
+
 @login_required
 def regJoin(request, userID):
 
@@ -278,4 +296,18 @@ def viewWishList(request, userID, groupPin):
             "regDetail": regDetail,
             "regWishList": regWishList,
             "noPair": noPair
+        })
+    
+@login_required
+def wishEdit(request, wishID):
+
+    gift = Gift.objects.defer('user').get(id=wishID)
+    print(gift)
+
+    if request.method == "POST":
+        return
+    
+    else:
+        return render(request, "user/wishedit.html", {
+            "gift": gift
         })

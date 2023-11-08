@@ -1,3 +1,5 @@
+<!-- Page displays to admin a reg user gift list. -->
+
 {% extends 'layout.html' %}
 
 {% block body %} 
@@ -13,11 +15,9 @@
 
 <div class="container mt-4">
     {% for gift in gifts %}
-    <div class="d-flex justify-content-center align-items-center">
-        <div class="border border-3 p-3 mb-4 text-start">
+    <div class="border border-3 p-3 mb-4">
             <p>Wish URL: <a target="_blank" href="{{ gift.giftUrl }}">{{ gift.giftUrl }}</a></p>
             <p>Wish Ranking: {{ gift.giftRank }}</p>
-        </div>
     </div>
     {% endfor %}
 </div>

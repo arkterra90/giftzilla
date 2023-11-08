@@ -4,6 +4,7 @@
 
 <div class="container py-2">
     <a class="btn btn-primary" href="{% url 'user:viewReg' userID=user.id %}">Back To View Registries</a>
+    <a class="btn btn-primary" href="{% url 'user:regDelete' groupPin=reg.regPin %}">Delete Registry</a>
 </div>
 
 <div class="container d-flex justify-content-center align-items-center min-vh-100">

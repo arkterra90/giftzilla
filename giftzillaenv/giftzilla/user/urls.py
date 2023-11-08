@@ -13,6 +13,9 @@ urlpatterns = [
         path("<str:groupPin>/<int:userID>/viewWishList", views.viewWishList, name="viewWishList"),
         path("<str:groupPin>/<int:userID>/adminWishListView", views.adminWishListView, name="adminWishListView"),
         path("<str:groupPin>/regPair", views.regPair, name="regPair"),
+        path("<str:groupPin>/regDelete", views.regDelete, name="regDelete"),
+        path("<str:wishID>/wishEdit", views.wishEdit, name="wishEdit")
+
 
 
 
