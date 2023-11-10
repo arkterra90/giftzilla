@@ -1,6 +1,6 @@
 import random
 import string
-from .models import giftGroups
+from .models import giftGroups, listPair
 
 # create groupPin generator
 def generate_pin():
@@ -14,9 +14,11 @@ def generate_pin():
             return(random_pin)
         
 
-def listPair(people, noPairs):
+def regPairs(people, noPairs):
 
     # Shuffle the list of people randomly
+    people = list(people)
+    noPairs = list(noPairs)
     random.shuffle(people)
 
     # Initialize a list to store the pairs
@@ -37,7 +39,7 @@ def listPair(people, noPairs):
             pairs.append((person, partner))
             people.remove(partner)
         else:
-            return
+            return("billy")
             # If no suitable partner found, handle it as needed (e.g., skip or record it)
 
         # Print the pairs

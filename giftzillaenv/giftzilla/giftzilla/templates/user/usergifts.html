@@ -14,11 +14,19 @@
         <li>If there is anyone in your registry you cannot be pair with, such as a household member, make that selection as well.</li>
     </ul>
 </div>
+
+
 <div class="container">
     <h5>You're registering a wish list for group: {{ groupReg.regName }}</h5>
     <h5>Group ID: {{ groupReg.regPin }}</h5>
     <h5>Spending Limit: ${{ groupReg.spendLimit }}</h5>
     <h5>Group Admin: {{ groupReg.admin.first_name }} {{ groupReg.admin.last_name }}</h5>
+    
+    {% if success %}
+
+    <a class="btn btn-primary" href="{% url 'user:viewWishList' groupPin=groupReg.regPin userID=user.id %}">Edit/View Wish List</a>
+
+    {% else %}
     <form method="post">
         {% csrf_token %}
         <ul class="list-group">
@@ -40,6 +48,7 @@
         <br>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+    {% endif %}
 </div>
 
 {% endblock %}

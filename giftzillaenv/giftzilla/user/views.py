@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from .models import *
 from .forms import *
-from .utils import generate_pin, listPair
+from .utils import generate_pin, regPairs
 
 from user.models import *
 
@@ -53,10 +53,32 @@ def adminWishListView(request, userID, groupPin):
 
     gifts = Gift.objects.filter(user=userID, groupPin=groupPin)
     reg = Registry.objects.get(regPin=groupPin)
+    noPair = noGive.objects.get(user=userID, regPin=groupPin)
     return render(request, "user/adminwishview.html", {
         "reg": reg,
-        "gifts": gifts
+        "gifts": gifts,
+        "noPair": noPair
     })
+
+# Allows admin to create pairs
+@login_required
+def createPairs(request, groupPin):
+    
+    reg =  Registry.objects.get(regPin=groupPin)
+    noPairs = noGive.objects.filter(regPin=groupPin).values_list('user__id', 'noGift__id')
+    people = giftGroups.objects.filter(groupPin=groupPin).values_list('user__id', flat=True)
+
+    if request.method ==  "POST":
+
+        pairs = regPairs(people, noPairs)
+        print(pairs)
+        return
+    
+    else:
+    
+        return  render(request, "user/createpairs.html",{
+            "reg": reg
+        })
 
 # Allows a user to create a new registry.
 @login_required
@@ -135,7 +157,7 @@ def regJoin(request, userID):
 
             # makes sure the registry pre-exist in the data base
                 try:
-                    Registry.objects.get(regPin=pin)
+                    instance.registry = Registry.objects.get(regPin=pin)
                     instance.save()
                     return render(request, 'user/joinreg.html', {
                         "message": "Success group joined. Check View Registries to see group."
@@ -213,6 +235,7 @@ def userGifts(request, groupPin, userID):
 
             return render(request, "user/usergifts.html", {
                 "message": "Wish list saved.",
+                "success":  "success",
                 "groupReg": groupReg,
                 "user": user,
                 "giftForms": giftForms,
@@ -257,6 +280,42 @@ def userGifts(request, groupPin, userID):
             "noGiveForm": noForm,
             
         })
+
+# Allows user to delete themselves from a registry.
+@login_required
+def userRegDelete(request, userID, groupPin):
+
+    if request.method == "POST":
+
+        user = request.user
+
+        try:
+            userGiftGroup = giftGroups.objects.get(user=user, groupPin=groupPin)
+            userGiftGroup.delete()
+        except ObjectDoesNotExist:
+            pass
+
+        try:
+            userWishList = Gift.objects.filter(user=user, groupPin=groupPin)
+            userWishList.delete()
+        except ObjectDoesNotExist:
+            pass
+
+        try:
+            userNoPair = noGive.objects.filter(user=user, regPin=groupPin)
+            userNoPair.delete()
+        except ObjectDoesNotExist:
+            pass
+
+        return HttpResponseRedirect(reverse('user:viewReg', args=[userID]))
+    
+    else:
+
+        reg = giftGroups.objects.get(user=request.user, groupPin=groupPin)
+        return render(request, "user/userRegDel.html", {
+            "reg": reg,
+        })
+    
 
 # Gives user a view of all registries they admin or have registered for.
 @login_required

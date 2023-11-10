@@ -1,15 +1,13 @@
-<!-- Allows user to edit a wish list entry -->
+{% extends 'layout.html' %}
 
-{% extends 'layout.html' %} 
-
-{% block body %} 
+{% block body %}
 
 <div class="container py-2">
     <a class="btn btn-primary" href="{% url 'user:viewWishList' userID=request.user.id groupPin=gift.groupPin %}">Back To Wish List</a>
 </div>
 
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card">
+    <div class="card" style="width: 66%;"> <!-- Adjusted width to approximately 2/3 of the screen -->
         <div class="card-body">
             <h5 class="card-title">{{ message }}</h5>
             <h5 class="card-text">Edit your gift wish:</h5>

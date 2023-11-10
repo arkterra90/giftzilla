@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="container mt-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Are you sure you are ready to create registry pairings?</h5>
+        <p class="card-text">Please make sure the following is complete:</p>
+        <ul>
+            <li>All members who need to join have joined.</li>
+            <li>All members have submitted gifts to their list.</li>
+            <li>All members have appropriate none pairings selected. Such as members of their household.</li>
+        </ul>
+        <p>If all these items have been satisfied you are ready to pair your registry members.</p>
+  
+        <form method="post" action="{% url 'user:createPairs' groupPin=reg.regPin %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Create Pairings</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

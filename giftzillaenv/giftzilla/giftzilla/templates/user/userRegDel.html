@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Are you sure you want to delete this registry?</h5>
+      <p class="card-text">All data will be lost forever.</p>
+
+      <form method="post" action="{% url 'user:userRegDelete' userID=user.id groupPin=reg.groupPin %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete Registry</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
