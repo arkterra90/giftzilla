@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError, DatabaseError
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -10,6 +11,7 @@ from .utils import generate_pin, listPair
 
 from user.models import *
 
+# Allows an admin to make adjustments to their registry info
 @login_required
 def adminReg(request, groupPin):
 
@@ -44,6 +46,8 @@ def adminReg(request, groupPin):
             "regPart": regPart
         })
     
+# Allows an admin to view a wish list from someone who
+# has joined their registry.
 @login_required
 def adminWishListView(request, userID, groupPin):
 
@@ -54,6 +58,7 @@ def adminWishListView(request, userID, groupPin):
         "gifts": gifts
     })
 
+# Allows a user to create a new registry.
 @login_required
 def createRegistry(request):
 
@@ -84,6 +89,7 @@ def createRegistry(request):
             "regForm": regForm
         })
     
+# Allows an admin to delete an entire registry
 @login_required
 def regDelete(request, groupPin):
     
@@ -102,6 +108,7 @@ def regDelete(request, groupPin):
             "reg": reg
         })
 
+# Allows a user to join a registry.
 @login_required
 def regJoin(request, userID):
 
@@ -147,6 +154,7 @@ def regJoin(request, userID):
             "joinForm": joinForm
         })
     
+# Unfinished
 @login_required
 def regPair(request, groupPin):
 
@@ -157,6 +165,7 @@ def regPair(request, groupPin):
 
     return
 
+# Saves user wish list for a registry they are a part of.
 @login_required
 def userGifts(request, groupPin, userID):
 
@@ -249,6 +258,7 @@ def userGifts(request, groupPin, userID):
             
         })
 
+# Gives user a view of all registries they admin or have registered for.
 @login_required
 def viewReg(request, userID):
 
@@ -279,6 +289,7 @@ def viewReg(request, userID):
            
         })
     
+# Allows user to view their wishlist from a specific registry
 @login_required
 def viewWishList(request, userID, groupPin):
 
@@ -298,16 +309,42 @@ def viewWishList(request, userID, groupPin):
             "noPair": noPair
         })
     
+# Allows user to edit an individual gift wish 
 @login_required
 def wishEdit(request, wishID):
 
     gift = Gift.objects.defer('user').get(id=wishID)
-    print(gift)
+    giftinstance = giftForm(instance=gift)
 
     if request.method == "POST":
-        return
+        instance = gift
+
+        instance.giftUrl = request.POST.get("giftUrl")
+        instance.giftRank = request.POST.get("giftRank")
+        
+        if instance.giftRank == '':
+            instance.giftRank = None
+        
+        try:
+            instance.save()
+        except (DatabaseError, IntegrityError):
+            return render(request, "user/wishedit.html", {
+            "gift": gift,
+            "giftinstance": giftinstance,
+            "message": "Changes Not Saved! Please try again."
+        }) 
+
+        gift = Gift.objects.defer('user').get(id=wishID)
+        giftinstance = giftForm(instance=gift)
+
+        return render(request, "user/wishedit.html", {
+            "gift": gift,
+            "giftinstance": giftinstance,
+            "message": "Changes Saved!"
+        })
     
     else:
         return render(request, "user/wishedit.html", {
-            "gift": gift
+            "gift": gift,
+            "giftinstance": giftinstance
         })
