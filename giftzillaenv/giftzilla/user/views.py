@@ -68,15 +68,44 @@ def createPairs(request, groupPin):
     noPairs = noGive.objects.filter(regPin=groupPin).values_list('user__id', 'noGift__id')
     people = giftGroups.objects.filter(groupPin=groupPin).values_list('user__id', flat=True)
 
+    try:
+        pairs = listPair.objects.filter(regPin=groupPin)
+    except ObjectDoesNotExist:
+        pairs = None
+
     if request.method ==  "POST":
 
-        pairs = regPairs(people, noPairs)
-        return
+        # Utils function to create pairs
+        j = regPairs(people, noPairs)
+
+        # In the event the function returns None. Handles error.
+        if j == None:
+            return render(request, "user/createpairs.html", {
+                "reg": reg,
+                "message": "Not able to make pairs at this time. Please try again."
+            })
+
+        # Creates listPair entries for user pairings
+        for p in j:
+
+            userFrom = User.objects.get(id=p[0])
+            userTo = User.objects.get(id=p[1])
+
+            t = listPair.objects.create(giver=userFrom, reciever=userTo, regPin=groupPin)
+            try:
+                pairs = listPair.objects.filter(regPin=groupPin)
+            except ObjectDoesNotExist:
+                pairs = None
+        return render(request, "user/createpairs.html", {
+            "reg": reg,
+            "pairs": pairs
+        })
     
     else:
     
         return  render(request, "user/createpairs.html",{
-            "reg": reg
+            "reg": reg,
+            "pairs": pairs
         })
 
 # Allows a user to create a new registry.
@@ -199,7 +228,6 @@ def userGifts(request, groupPin, userID):
         groupReg = Registry.objects.get(regPin=groupPin)
         user = User.objects.get(id=userID)
         urlCap = groupReg.urlNumCap
-        currentGift = Gift.objects.filter(groupPin=groupPin, user=user)        
 
         giftForms = []
 

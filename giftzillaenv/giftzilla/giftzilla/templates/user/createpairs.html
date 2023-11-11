@@ -1,25 +1,39 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+<div class="container py-2">
+<a class="btn btn-primary" style="padding-top: 10px;" href="{% url 'user:adminReg' groupPin=reg.regPin %}">Back To Group Info</a>
+</div>
 
 <div class="container mt-4">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Are you sure you are ready to create registry pairings?</h5>
-        <p class="card-text">Please make sure the following is complete:</p>
-        <ul>
-            <li>All members who need to join have joined.</li>
-            <li>All members have submitted gifts to their list.</li>
-            <li>All members have appropriate none pairings selected. Such as members of their household.</li>
-        </ul>
-        <p>If all these items have been satisfied you are ready to pair your registry members.</p>
-  
-        <form method="post" action="{% url 'user:createPairs' groupPin=reg.regPin %}">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-danger">Create Pairings</button>
-        </form>
-      </div>
-    </div>
-  </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Are you sure you are ready to create registry pairings?</h5>
+            <p class="card-text">Please make sure the following is complete:</p>
+            <ul>
+                <li>All members who need to join have joined.</li>
+                <li>All members have submitted gifts to their list.</li>
+                <li>All members have appropriate none pairings selected. Such as members of their household.</li>
+            </ul>
+            <p>If all these items have been satisfied, you are ready to pair your registry members.</p>
+            <h2>If you have already created pairs, DO NOT create a new set of pairs. This will be a monumental inconvenience to those who have already purchased gifts.</h2>
 
+            <form method="post" action="{% url 'user:createPairs' groupPin=reg.regPin %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Create Pairings</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <h4>Current Registry Group Pairings:</h4>
+        {% if pairs %}
+            {% for pair in pairs %}
+                <h6>{{ pair.giver.first_name }} {{ pair.giver.last_name }} is paired and giving to {{ pair.reciever.first_name }} {{ pair.reciever.last_name }}</h6>
+            {% endfor %}
+        {% else %}
+            <p>You currently have no pairings in your registry. Click "Create Pairings."</p>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

@@ -1,6 +1,7 @@
 import random
 import string
 from .models import giftGroups, listPair
+from register.models import User
 
 # create groupPin generator
 def generate_pin():
@@ -13,21 +14,29 @@ def generate_pin():
         if not giftGroups.objects.filter(groupPin=random_pin).exists():
             return(random_pin)
         
-
-def regPairs(people, noPairs):
-    
+# creates pairings at reg admin request
+def regPairs(people, noPairs, max_attempts=100, max_retries=10):
     givers = list(people)
     receivers = list(people)
-    pairings = []
+    pairings = None
 
-    for giver in givers:
-        while True:
-            receiver = random.choice(receivers)
-            if giver != receiver and (giver, receiver) not in pairings and (giver, receiver) not in noPairs:
-                pairings.append((giver, receiver))
-                receivers.remove(receiver)
+    for _ in range(max_retries):
+        pairings = []
+        for giver in givers:
+            attempts = 0
+            while attempts < max_attempts:
+                receiver = random.choice(receivers)
+                if giver != receiver and (giver, receiver) not in pairings and (giver, receiver) not in noPairs:
+                    pairings.append((giver, receiver))
+                    receivers.remove(receiver)
+                    break
+                attempts += 1
+
+            if attempts >= max_attempts:
+                pairings = None  # Reset pairings if unsuccessful within the limit
                 break
-            elif giver == receiver:
-                continue
-    print(pairings)
+
+        if pairings:
+            break  # Successful pairings found, exit the loop
+
     return pairings
