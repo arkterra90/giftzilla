@@ -3,10 +3,11 @@
 {% block body %}
 
 <div class="container py-2">
-    <a class="btn btn-primary" href="{% url 'user:viewReg' userID=user.id %}">Back To View Registries</a>
-    <a class="btn btn-primary" href="{% url 'user:regDelete' groupPin=reg.regPin %}">Delete Registry</a>
-    <a class="btn btn-primary" href="{% url 'user:createPairs' groupPin=reg.regPin %}">Create Registry Pairings</a>
-
+    <div class="btn-group mb-2" role="group" aria-label="Page actions">
+        <a class="btn btn-primary" href="{% url 'user:viewReg' userID=user.id %}">Back To View Registries</a>
+        <a class="btn btn-primary" href="{% url 'user:regDelete' groupPin=reg.regPin %}">Delete Registry</a>
+        <a class="btn btn-primary" href="{% url 'user:createPairs' groupPin=reg.regPin %}">Create Registry Pairings</a>
+    </div>
 </div>
 
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
@@ -18,19 +19,34 @@
             <form method="post">
                 {% csrf_token %}
                 {{ reginstance.as_p }}
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary mt-2">Save</button>
             </form>
         </div>
     </div>
 </div>
 
-<div class="container">
-    <h5 class="mt-4">Registry participants:</h5>
-    {% for part in regPart %}
-        <div class="mb-3">
-            <p class="mb-0">Name: {{ part.user.first_name }} {{ part.user.last_name }}</p>
-            <a class="btn btn-primary" href="{% url 'user:adminWishListView' groupPin=reg.regPin userID=part.user.id %}">View Gift List</a>
-        </div>
-    {% endfor %}
+<div class="container mt-4">
+    <h5>Registry participants:</h5>
+    <div class="list-group">
+        {% for part in regPart %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <p class="mb-0">Name: {{ part.user.first_name }} {{ part.user.last_name }}</p>
+                <a class="btn btn-primary" href="{% url 'user:adminWishListView' groupPin=reg.regPin userID=part.user.id %}">View Gift List</a>
+            </div>
+        {% endfor %}
+    </div>
 </div>
+
+<div class="container mt-4">
+    <h5>Registry Pairings:</h5>
+    <div class="list-group">
+        {% for pair in pairs %}
+            <div class="list-group-item">
+                <p class="mb-0">Giver: {{ pair.giver.first_name }} {{ pair.giver.last_name }}</p>
+                <p class="mb-0">Receiver: {{ pair.reciever.first_name }} {{ pair.reciever.last_name }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
 {% endblock %}

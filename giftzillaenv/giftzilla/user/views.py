@@ -40,10 +40,16 @@ def adminReg(request, groupPin):
 
         regPart = giftGroups.objects.filter(groupPin=groupPin)
 
+        try:
+            pairs = listPair.objects.filter(regPin=groupPin)
+        except ObjectDoesNotExist:
+            pairs = None
+
         return render(request, "user/adminreg.html", {
             "reginstance": reginstance,
             "reg": reg,
-            "regPart": regPart
+            "regPart": regPart,
+            "pairs": pairs
         })
     
 # Allows an admin to view a wish list from someone who
@@ -53,7 +59,10 @@ def adminWishListView(request, userID, groupPin):
 
     gifts = Gift.objects.filter(user=userID, groupPin=groupPin)
     reg = Registry.objects.get(regPin=groupPin)
-    noPair = noGive.objects.get(user=userID, regPin=groupPin)
+    try:
+        noPair = noGive.objects.get(user=userID, regPin=groupPin)
+    except ObjectDoesNotExist:
+        noPair = None
     return render(request, "user/adminwishview.html", {
         "reg": reg,
         "gifts": gifts,
@@ -75,6 +84,8 @@ def createPairs(request, groupPin):
 
     if request.method ==  "POST":
 
+        if pairs != None:
+            pairs.delete()
         # Utils function to create pairs
         j = regPairs(people, noPairs)
 
@@ -98,7 +109,8 @@ def createPairs(request, groupPin):
                 pairs = None
         return render(request, "user/createpairs.html", {
             "reg": reg,
-            "pairs": pairs
+            "pairs": pairs,
+            "message": "Pairs created successfully."
         })
     
     else:
