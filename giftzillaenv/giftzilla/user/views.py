@@ -71,7 +71,6 @@ def createPairs(request, groupPin):
     if request.method ==  "POST":
 
         pairs = regPairs(people, noPairs)
-        print(pairs)
         return
     
     else:

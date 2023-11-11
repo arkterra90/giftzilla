@@ -15,34 +15,19 @@ def generate_pin():
         
 
 def regPairs(people, noPairs):
+    
+    givers = list(people)
+    receivers = list(people)
+    pairings = []
 
-    # Shuffle the list of people randomly
-    people = list(people)
-    noPairs = list(noPairs)
-    random.shuffle(people)
-
-    # Initialize a list to store the pairs
-    pairs = []
-
-    # Pair people while avoiding exclusions
-    while people:
-        person = people.pop(0)
-        partner = None
-        
-        # Find a partner for the current person who is not in the exclusion list
-        for candidate in people:
-            if (person, candidate) not in noPairs and (candidate, person) not in noPairs:
-                partner = candidate
+    for giver in givers:
+        while True:
+            receiver = random.choice(receivers)
+            if giver != receiver and (giver, receiver) not in pairings and (giver, receiver) not in noPairs:
+                pairings.append((giver, receiver))
+                receivers.remove(receiver)
                 break
-        
-        if partner:
-            pairs.append((person, partner))
-            people.remove(partner)
-        else:
-            return("billy")
-            # If no suitable partner found, handle it as needed (e.g., skip or record it)
-
-        # Print the pairs
-    for pair in pairs:
-        print(f'{pair[0]} is paired with {pair[1]}')
-    return(pairs)
+            elif giver == receiver:
+                continue
+    print(pairings)
+    return pairings
