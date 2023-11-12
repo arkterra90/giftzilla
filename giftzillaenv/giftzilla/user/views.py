@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import IntegrityError, DatabaseError
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -247,14 +247,43 @@ def userGifts(request, groupPin, userID):
             form = giftForm(request.POST, prefix=f'gift_form_{i}')
             giftForms.append(form)
 
-        # if not currentGift.exists():
+        # Saves user wish list and handles form saving errors
+        try:
+            if all(form.is_valid() for form in giftForms):
+                for form in giftForms:
+                    gift = form.save(commit=False)
+                    gift.user = user 
+                    gift.groupPin = groupReg.regPin
+                    gift.save()
+        except ValidationError:
 
-        if all(form.is_valid() for form in giftForms):
-            for form in giftForms:
-                gift = form.save(commit=False)
-                gift.user = user 
-                gift.groupPin = groupReg.regPin
-                gift.save()
+            regUsers = giftGroups.objects.filter(groupPin=groupPin)
+            noForm = noGiveForm()
+            noForm.fields['noGift'].queryset = regUsers
+
+            return render(request, "user/usergifts.html", {
+            "groupReg": groupReg,
+            "user": user,
+            "giftForms": giftForms,
+            "regUsers": regUsers,
+            "noGiveForm": noForm,
+            "message": "Something went wrong saving your wish list. Please try again."
+            })
+        
+        except ValueError:
+
+            regUsers = giftGroups.objects.filter(groupPin=groupPin)
+            noForm = noGiveForm()
+            noForm.fields['noGift'].queryset = regUsers
+
+            return render(request, "user/usergifts.html", {
+            "groupReg": groupReg,
+            "user": user,
+            "giftForms": giftForms,
+            "regUsers": regUsers,
+            "noGiveForm": noForm,
+            "message": "Something went wrong saving your wish list. Please try again."
+            })
         
         # Saves user selection for someone they can't be paired with
         try:
@@ -296,7 +325,8 @@ def userGifts(request, groupPin, userID):
             "noGiveForm": noForm,
             "message": "Something went wrong saving your wish list. Please try again."
         })
-    
+
+    # get request for initial wish list submissionn
     else:
         groupReg = Registry.objects.get(regPin=groupPin)
         user = User.objects.get(id=userID)
