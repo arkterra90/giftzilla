@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div>
+    <h1>{{ message }}</h1>
+</div>
+<div class="container">
+    <h5>Welcome {{ user.first_name }} to your wish list!</h5>
+    <ul>
+        <li>Below you can make sure users who might not want to be paired together can be excluded from being matched in your registry.</li>
+    </ul>
+</div>
+
+
+<div class="container">
+    <h5>Registry Group Name: {{ groupReg.regName }}</h5>
+    <h5>Group ID: {{ groupReg.regPin }}</h5>
+    
+    {% if success %}
+
+    <a class="btn btn-primary" href="{% url 'user:viewWishList' groupPin=groupReg.regPin userID=user.id %}">Edit/View Wish List</a>
+
+    {% else %}
+    <form method="post">
+        {% csrf_token %}
+        <br>
+        {% for user in regUsers %}
+            <label for="user_dropdown" value="{{ user.user.id }}">{{ user.user.first_name }} {{ user.user.last_name }} can't be pair with:</label>
+            <select name="user_dropdown" id="user_dropdown" class="form-select">
+                <option value="0">None</option>
+                {% for user in regUsers %}
+                    <option value="{{ user.user.id }}">{{ user.user.first_name }} {{ user.user.last_name }}</option>
+                {% endfor %}
+            </select>
+        {% endfor %}
+        <br>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% endif %}
+</div>
+
+{% endblock %}

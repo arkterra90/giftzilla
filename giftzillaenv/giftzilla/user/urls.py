@@ -17,6 +17,7 @@ urlpatterns = [
         path("<str:wishID>/wishEdit", views.wishEdit, name="wishEdit"),
         path("<str:groupPin>/<int:userID>/userRegDelete", views.userRegDelete, name="userRegDelete"),
         path("<str:groupPin>/createPairs", views.createPairs, name="createPairs"),
+        path("<str:groupPin>/noPairs", views.noPairs, name="noPairs")
 
 
 

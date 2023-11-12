@@ -151,6 +151,79 @@ def createRegistry(request):
             "regForm": regForm
         })
     
+@login_required
+def noPairs(request, groupPin):
+
+    user = request.user
+    groupReg = Registry.objects.get(regPin=groupPin)
+    userCount = giftGroups.objects.filter(groupPin=groupPin).count()
+
+
+    if request.method == "POST":
+
+        noPairForms = []
+
+        for i in range(userCount):
+            form = noGiveForm(request.POST, prefix=f'no_pair_{i}')
+            noPairForms.append(form)
+        try:
+            noPair = int(request.POST.get("user_dropdown"))
+            
+            if noPair == 0:
+                t = noGive.objects.create(user=user, noGift=None, regPin=groupPin)
+                t.save()
+            else:
+                p = User.objects.get(id=noPair)
+                t = noGive.objects.create(user=user, noGift=p, regPin=groupPin)
+                t.save()
+
+            regUsers = giftGroups.objects.filter(groupPin=groupPin)
+            noForm = noGiveForm()
+            noForm.fields['noGift'].queryset = regUsers
+
+            return render(request, "user/usernoPairs.html", {
+                "message": "Wish list saved.",
+                "success":  "success",
+                "groupReg": groupReg,
+                "user": user,
+                "regUsers": regUsers,
+                "noGiveForm": noForm,
+                })
+        
+        except TypeError:
+
+            regUsers = giftGroups.objects.filter(groupPin=groupPin)
+            noForm = noGiveForm()
+            noForm.fields['noGift'].queryset = regUsers
+
+            noPairForms = []
+
+            for i in range(userCount):
+                noPairForms.append(noGiveForm(prefix=f'no_pair_{i}'))
+
+            return render(request, "user/usernoPairs.html", {
+            "groupReg": groupReg,
+            "user": user,
+            "regUsers": regUsers,
+            "noGiveForm": noForm,
+            "noPairForms": noPairForms,
+            "message": "Something went wrong saving your wish list. Please try again."
+        })
+
+    else:
+
+
+        regUsers = giftGroups.objects.filter(groupPin=groupPin)
+        noForm = noGiveForm()
+        noForm.fields['noGift'].queryset = regUsers
+    
+        return render(request, "user/usernopairs.html", {
+            "groupReg": groupReg,
+            "user": user,
+            "regUsers": regUsers,
+            "noGiveForm": noForm,
+        })
+    
 # Allows an admin to delete an entire registry
 @login_required
 def regDelete(request, groupPin):
