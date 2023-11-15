@@ -257,45 +257,45 @@ def userGifts(request, groupPin, userID):
                 gift.save()
         
         # Saves user selection for someone they can't be paired with
-        try:
-            noPair = int(request.POST.get("user_dropdown"))
+        # try:
+        #     noPair = int(request.POST.get("user_dropdown"))
             
-            if noPair == 0:
-                t = noGive.objects.create(user=user, noGift=None, regPin=groupPin)
-                t.save()
-            else:
-                p = User.objects.get(id=noPair)
-                t = noGive.objects.create(user=user, noGift=p, regPin=groupPin)
-                t.save()
+        #     if noPair == 0:
+        #         t = noGive.objects.create(user=user, noGift=None, regPin=groupPin)
+        #         t.save()
+        #     else:
+        #         p = User.objects.get(id=noPair)
+        #         t = noGive.objects.create(user=user, noGift=p, regPin=groupPin)
+        #         t.save()
 
-            regUsers = giftGroups.objects.filter(groupPin=groupPin)
-            noForm = noGiveForm()
-            noForm.fields['noGift'].queryset = regUsers
+        #     regUsers = giftGroups.objects.filter(groupPin=groupPin)
+        #     noForm = noGiveForm()
+        #     noForm.fields['noGift'].queryset = regUsers
 
-            return render(request, "user/usergifts.html", {
-                "message": "Wish list saved.",
-                "success":  "success",
-                "groupReg": groupReg,
-                "user": user,
-                "giftForms": giftForms,
-                "regUsers": regUsers,
-                "noGiveForm": noForm,
-                })
+        #     return render(request, "user/usergifts.html", {
+        #         "message": "Wish list saved.",
+        #         "success":  "success",
+        #         "groupReg": groupReg,
+        #         "user": user,
+        #         "giftForms": giftForms,
+        #         "regUsers": regUsers,
+        #         "noGiveForm": noForm,
+        #         })
         
-        except TypeError:
+        # except TypeError:
 
-            regUsers = giftGroups.objects.filter(groupPin=groupPin)
-            noForm = noGiveForm()
-            noForm.fields['noGift'].queryset = regUsers
+        #     regUsers = giftGroups.objects.filter(groupPin=groupPin)
+        #     noForm = noGiveForm()
+        #     noForm.fields['noGift'].queryset = regUsers
 
-            return render(request, "user/usergifts.html", {
-            "groupReg": groupReg,
-            "user": user,
-            "giftForms": giftForms,
-            "regUsers": regUsers,
-            "noGiveForm": noForm,
-            "message": "Something went wrong saving your wish list. Please try again."
-        })
+        #     return render(request, "user/usergifts.html", {
+        #     "groupReg": groupReg,
+        #     "user": user,
+        #     "giftForms": giftForms,
+        #     "regUsers": regUsers,
+        #     "noGiveForm": noForm,
+        #     "message": "Something went wrong saving your wish list. Please try again."
+        # })
     
     else:
         groupReg = Registry.objects.get(regPin=groupPin)
