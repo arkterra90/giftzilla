@@ -272,15 +272,15 @@ def userGifts(request, groupPin, userID):
         #     noForm = noGiveForm()
         #     noForm.fields['noGift'].queryset = regUsers
 
-        #     return render(request, "user/usergifts.html", {
-        #         "message": "Wish list saved.",
-        #         "success":  "success",
-        #         "groupReg": groupReg,
-        #         "user": user,
-        #         "giftForms": giftForms,
-        #         "regUsers": regUsers,
-        #         "noGiveForm": noForm,
-        #         })
+        return render(request, "user/usergifts.html", {
+            "message": "Wish list saved.",
+            "success":  "success",
+            "groupReg": groupReg,
+            "user": user,
+            "giftForms": giftForms,
+            "regUsers": regUsers,
+            "noGiveForm": noForm,
+            })
         
         # except TypeError:
 
