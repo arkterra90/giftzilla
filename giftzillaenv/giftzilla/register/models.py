@@ -23,3 +23,7 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.username} {self.first_name} {self.last_name} {self.email} {self.is_active} {self.is_active}"
     
+class emailVerify(models.Model):
+
+    pin = models.CharField(max_length=5)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -1,0 +1,28 @@
+{% extends 'layout.html' %} 
+
+{% block body %} 
+
+{% if success %}
+
+<h1>Account activated!</h1>
+
+{% elif fail %}
+
+<h1>Account Not Activated! Please retry from the link in your email.</h1>
+
+{% else %}
+
+<p>Welcome to GiftZilla!</p>
+<p>You registered with email address: {{ user.email }}</p>
+<p>Activate your account and begin you GiftZilla journey.</p>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" value="{{ emailVer.pin }}" name="emailPin">
+    <input type="hidden" value="{{ user.id }}" name="userID">
+    <button type="submit">Activate Account</button>
+</form>
+
+{% endif %}
+
+{% endblock %}

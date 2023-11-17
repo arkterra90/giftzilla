@@ -12,11 +12,12 @@ urlpatterns = [
         path("<str:groupPin>/<int:userID>/userGifts", views.userGifts, name="userGifts"),
         path("<str:groupPin>/<int:userID>/viewWishList", views.viewWishList, name="viewWishList"),
         path("<str:groupPin>/<int:userID>/adminWishListView", views.adminWishListView, name="adminWishListView"),
-        path("<str:groupPin>/regPair", views.regPair, name="regPair"),
         path("<str:groupPin>/regDelete", views.regDelete, name="regDelete"),
         path("<str:wishID>/wishEdit", views.wishEdit, name="wishEdit"),
         path("<str:groupPin>/<int:userID>/userRegDelete", views.userRegDelete, name="userRegDelete"),
         path("<str:groupPin>/createPairs", views.createPairs, name="createPairs"),
+        path("<str:groupPin>/<int:userID>/viewPairWishList", views.viewPairWishList, name="viewPairWishList"),
+
 
 
 

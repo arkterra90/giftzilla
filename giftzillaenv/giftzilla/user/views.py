@@ -4,6 +4,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError, DatabaseError
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils.html import format_html
+from django.core.mail import send_mail
+
+
 
 from .models import *
 from .forms import *
@@ -102,11 +106,27 @@ def createPairs(request, groupPin):
             userFrom = User.objects.get(id=p[0])
             userTo = User.objects.get(id=p[1])
 
+            html_message = format_html(
+                f"Hi {userFrom.first_name},<br>"
+                f"Your registry admin has created pairs for your registry: {reg.regName}.<br>"
+                f"You are paired with {userTo.first_name} {userTo.last_name}.<br>"
+                f"Go to <a href='https://giftzilla-test-l62gt.ondigitalocean.app'>GiftZilla</a> and go to View Registries to see your pairing.<br>"
+                "<br>"
+                "Thanks, <br>"
+                "GiftZilla"
+            )
+
+            subject = "GiftZilla: Your registry pairing is READY!"
+            message = f" { userFrom.first_name }, Your registry admin has created pairins for your registry. Go to GiftZilla and click view registries to see who you are paired with and their gifts."
+            send_mail(subject, message=html_message, recipient_list=[userFrom.email], from_email='noreply.giftzilla@gmail.com', html_message=html_message)
+
             t = listPair.objects.create(giver=userFrom, reciever=userTo, regPin=groupPin)
+
             try:
                 pairs = listPair.objects.filter(regPin=groupPin)
             except ObjectDoesNotExist:
                 pairs = None
+
         return render(request, "user/createpairs.html", {
             "reg": reg,
             "pairs": pairs,
@@ -215,17 +235,6 @@ def regJoin(request, userID):
         return render(request, "user/joinreg.html", {
             "joinForm": joinForm
         })
-    
-# Unfinished
-@login_required
-def regPair(request, groupPin):
-
-    reg = Registry.objects.filter(regPin=groupPin)
-    regUsers = giftGroups.objects.filter(groupPin=groupPin)
-    noPairs = noGive.objects.filter(regPin=groupPin)
-
-
-    return
 
 # Saves user wish list for a registry they are a part of.
 @login_required
@@ -296,6 +305,22 @@ def userGifts(request, groupPin, userID):
             "giftForms": giftForms,
             
         })
+@login_required
+def viewPairWishList(request, userID, groupPin):
+
+    user = User.objects.get(id=userID)
+
+    reg = Registry.objects.get(regPin=groupPin)
+    pair = listPair.objects.get(regPin=groupPin, giver=user)
+
+    gifts = Gift.objects.filter(groupPin=groupPin, user=pair.reciever)
+    print(gifts)
+
+    return render(request, "user/pairingwishlist.html", {
+        "reg": reg,
+        "pair": pair,
+        "gifts": gifts
+    })
 
 # Allows user to delete themselves from a registry.
 @login_required
@@ -356,11 +381,16 @@ def viewReg(request, userID):
             Gifts = Gift.objects.filter(user=user).values_list('groupPin', flat=True).distinct()
         except ObjectDoesNotExist:
             Gifts = None
+        try:
+            pairings = listPair.objects.filter(giver=user).values_list('regPin', flat=True).distinct()
+        except ObjectDoesNotExist:
+            pairings = None
        
         return render(request, "user/viewreg.html", {
             "adminRegs": adminRegs,
             "joinedRegs": joinedRegs,
             "gifts": Gifts,
+            "pairings": pairings
            
         })
     

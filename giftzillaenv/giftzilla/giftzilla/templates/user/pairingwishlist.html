@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Welcome {{ pair.giver.first_name }} to your matched wish list.</h2>
+    <p>You have been paired with {{ pair.reciever.first_name }} {{ pair.reciever.last_name }}.</p>
+    <p>Check out their wish list below, and pay attention to their top three ranked gifts.</p>
+
+    <div class="row mt-4">
+        {% for gift in gifts %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Gift URL</h5>
+                    <p class="card-text">{{ gift.giftUrl }}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Gift Rank: {{ gift.giftRank }}</li>
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

@@ -11,6 +11,8 @@ from index.views import home
 
 from .forms import *
 from .models import *
+from index.utils import send_email
+from .utils import generate_pin, send_verify
 
 def login_view(request):
     if request.method == "POST":
@@ -54,13 +56,25 @@ def register(request):
         # Attempt to create new user
         try:
             
-            user = User.objects.create_user(username=username, email=email, password=password, is_staff=False, is_superuser=False, is_active=True, last_name=last_name, first_name=first_name)
+            user = User.objects.create_user(username=username, email=email, password=password, is_staff=False, is_superuser=False, is_active=False, last_name=last_name, first_name=first_name)
             user.save()
         except IntegrityError:
             return render(request, "register/register.html", {
                 "message": "Username already taken."
             })
         login(request, user)
+
+        pin = generate_pin()
+        emailPin = emailVerify.objects.create(user=user, pin=pin)
+        userID = user.id
+        emailverify =  send_verify(emailPin.pin, userID, request)
+
+        if emailverify == 0:
+            return render(request, "register/register.html", {
+                "message": "Verifcation email was not sent. Please verify email and try again.."
+            })
+
+
         return HttpResponseRedirect(reverse("index:home"))
     else:
         return render(request, "register/register.html", {
@@ -95,3 +109,33 @@ def profileView(request, userID):
             "userProf": userProf
         }) 
     
+
+def email_Verify(request, userID, emailPin):
+
+    if request.method == "POST":
+
+        veruserID = request.POST ["userID"]
+        veremailPin = request.POST ["emailPin"]
+
+        if str(veruserID) == str(userID) and str(veremailPin) == str(emailPin):
+
+            user = User.objects.get(id=userID)
+            user.is_active = True
+            user.save()
+
+            return render(request, "register/verify.html", {
+                "success": "Success"
+            })
+        else:
+            return render(request, "register/verify.html", {
+                "fail": "fail"
+            })
+    
+    else:
+        emailVer = emailVerify.objects.get(pin=emailPin)
+        user = User.objects.get(id=userID)
+
+        return render(request, "register/verify.html", {
+            "user": user,
+            "emailVer": emailVer
+        })
