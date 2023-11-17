@@ -10,7 +10,7 @@ Rank = (
 class Gift(models.Model):
     groupPin = models.CharField(max_length=5)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    giftUrl = models.URLField(max_length=500, blank=True, null=True)
+    giftUrl = models.CharField(max_length=800, blank=True, null=True)
     giftRank = models.CharField(max_length=1, choices=Rank, blank=True, null=True)
 
     def __str__(self):

@@ -248,29 +248,15 @@ def userGifts(request, groupPin, userID):
             giftForms.append(form)
 
         # if not currentGift.exists():
-
-        if all(form.is_valid() for form in giftForms):
-            for form in giftForms:
-                gift = form.save(commit=False)
-                gift.user = user 
-                gift.groupPin = groupReg.regPin
-                gift.save()
+        try:
+            if all(form.is_valid() for form in giftForms):
+                for form in giftForms:
+                    gift = form.save(commit=False)
+                    gift.user = user 
+                    gift.groupPin = groupReg.regPin
+                    gift.save()
         
         # Saves user selection for someone they can't be paired with
-        try:
-            noPair = int(request.POST.get("user_dropdown"))
-            
-            if noPair == 0:
-                t = noGive.objects.create(user=user, noGift=None, regPin=groupPin)
-                t.save()
-            else:
-                p = User.objects.get(id=noPair)
-                t = noGive.objects.create(user=user, noGift=p, regPin=groupPin)
-                t.save()
-
-            regUsers = giftGroups.objects.filter(groupPin=groupPin)
-            noForm = noGiveForm()
-            noForm.fields['noGift'].queryset = regUsers
 
             return render(request, "user/usergifts.html", {
                 "message": "Wish list saved.",
@@ -278,22 +264,15 @@ def userGifts(request, groupPin, userID):
                 "groupReg": groupReg,
                 "user": user,
                 "giftForms": giftForms,
-                "regUsers": regUsers,
-                "noGiveForm": noForm,
                 })
         
         except TypeError:
 
-            regUsers = giftGroups.objects.filter(groupPin=groupPin)
-            noForm = noGiveForm()
-            noForm.fields['noGift'].queryset = regUsers
 
             return render(request, "user/usergifts.html", {
             "groupReg": groupReg,
             "user": user,
             "giftForms": giftForms,
-            "regUsers": regUsers,
-            "noGiveForm": noForm,
             "message": "Something went wrong saving your wish list. Please try again."
         })
     
@@ -315,8 +294,6 @@ def userGifts(request, groupPin, userID):
             "groupReg": groupReg,
             "user": user,
             "giftForms": giftForms,
-            "regUsers": regUsers,
-            "noGiveForm": noForm,
             
         })
 
