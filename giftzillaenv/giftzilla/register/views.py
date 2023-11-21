@@ -28,7 +28,7 @@ def login_view(request):
             return HttpResponseRedirect(reverse('index:home'))
         else:
             return render(request, "register/login.html", {
-                "message": "Invalid username and/or password."
+                "message": "Invalid username and/or password. Make sure you have activated your account. Check your email and its spam folder for your activation link."
             })
     else:
         return render(request, "register/login.html")
